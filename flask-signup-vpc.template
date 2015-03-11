@@ -1,22 +1,6 @@
 { "AWSTemplateFormatVersion" : "2010-09-09",
 
-  "Description" : "AWS CloudFormation template to setup VPC environment across 2 AZs, 4 subnets per AZ.  Optionally, one NAT instance per AZ and one Software VPN Gateway will be deployed for the VPC.",
-
-    "Mappings" : {
-
-        "RegionAmis"   : {
-            "eu-west-1"       : { "nat" : "ami-892fe1fe", "vpn" : "ami-b3c900c4" },
-            "eu-central-1"    : { "nat" : "ami-204c7a3d", "vpn" : "ami-b83c0aa5" },
-            "sa-east-1"       : { "nat" : "ami-204c7a3d", "vpn" : "ami-4fc56a52" },
-            "us-east-1"       : { "nat" : "ami-76817c1e", "vpn" : "ami-641be70c" },
-            "ap-northeast-1"  : { "nat" : "ami-29dc9228", "vpn" : "ami-e3753ce2" },
-            "us-west-2"       : { "nat" : "ami-d13845e1", "vpn" : "ami-b7512c87" },
-            "us-west-1"       : { "nat" : "ami-f0d3d4b5", "vpn" : "ami-109a9d55" },
-            "ap-southeast-1"  : { "nat" : "ami-a6b6eaf4", "vpn" : "ami-58cb970a" },
-            "ap-southeast-2"  : { "nat" : "ami-d9fe9be3", "vpn" : "ami-5720446d" }
-        }
-
-  }, 
+  "Description" : "AWS CloudFormation template to setup VPC with 2 subnets, public and private, per AZ VPC.",
 
   "Parameters" : {
 
@@ -185,7 +169,6 @@
 
     "RouteViaNatAz1" : {
       "Type" : "AWS::EC2::RouteTable",
-      "Condition" : "CreateNatResources",
       "Properties" : {
         "VpcId" : {"Ref" : "Vpc"},
         "Tags" : [
@@ -226,7 +209,6 @@
 
     "PriSubnetRouteTableAssociationAz1" : {
       "Type" : "AWS::EC2::SubnetRouteTableAssociation",
-      "Condition" : "CreateNatResources",
       "Properties" : {
         "SubnetId" : { "Ref" : "PriSubnetAz1" },
         "RouteTableId" : { "Ref" : "RouteViaNatAz1" }
@@ -235,7 +217,6 @@
 
     "PriSubnetRouteTableAssociationAz2" : {
       "Type" : "AWS::EC2::SubnetRouteTableAssociation",
-      "Condition" : "CreateNatResources",
       "Properties" : {
         "SubnetId" : { "Ref" : "PriSubnetAz2" },
         "RouteTableId" : { "Ref" : "RouteViaNatAz2" }
