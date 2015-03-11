@@ -20,69 +20,6 @@
 
   "Parameters" : {
 
-    "NatInstanceType" : {
-      "Description" : "NAT EC2 instance type",
-      "Type" : "String",
-      "Default" : "t2.micro",
-      "AllowedValues" : [ "t2.micro","t2.small","t2.medium","m3.medium","m3.large","m3.xlarge","m3.2xlarge","c4.large","c4.xlarge","c4.2xlarge","c4.4xlarge","c4.8xlarge","c3.large","c3.xlarge","c3.2xlarge","c3.4xlarge","c3.8xlarge","r3.large","r3.xlarge","r3.2xlarge","r3.4xlarge","r3.8xlarge","i2.xlarge","i2.2xlarge","i2.4xlarge","i2.8xlarge" ],
-      "ConstraintDescription" : "must be a valid EC2 instance type."
-    },
-
-    "VpnInstanceType" : {
-      "Description" : "VPN Gateway EC2 instance type",
-      "Type" : "String",
-      "Default" : "t2.micro",
-      "AllowedValues" : [ "t2.micro","t2.small","t2.medium","m3.medium","m3.large","m3.xlarge","m3.2xlarge","c4.large","c4.xlarge","c4.2xlarge","c4.4xlarge","c4.8xlarge","c3.large","c3.xlarge","c3.2xlarge","c3.4xlarge","c3.8xlarge","r3.large","r3.xlarge","r3.2xlarge","r3.4xlarge","r3.8xlarge","i2.xlarge","i2.2xlarge","i2.4xlarge","i2.8xlarge" ],
-      "ConstraintDescription" : "must be a valid EC2 instance type."
-    },
-
-    "VpnUserPassword" : {
-      "Description" : "OpenVPN user password for SSL VPN access", 
-      "NoEcho" : "true",
-      "Type" : "String",
-      "MinLength" : "0",
-      "MaxLength" : "41"
-    },
-
-    "KeyName" : {
-      "Description" : "Name of an existing EC2 KeyPair to enable SSH access to the NAT/VPN server", 
-      "Type" : "AWS::EC2::KeyPair::KeyName"
-    },
-
-    "VpnShortHostname" : {
-      "Description" : "Short DNS name of the VPN Gateway",
-      "Type" : "String"
-    },
-
-    "HostedZone" : {
-      "Type" : "String",
-      "Description" : "The DNS name of an existing Amazon Route 53 hosted zone to add VPN Gateway resource record"
-    },
-
-    "CreateVpn" : {
-      "Type" : "String",
-      "Description" : "Create resources for VPN?",
-      "Default" : "false",
-      "AllowedValues" : [ "true", "false" ],
-      "ConstraintDescription" : "Enter either true of false"
-    },
-
-    "CreateNat" : {
-      "Type" : "String",
-      "Description" : "Create resources for NAT?",
-      "Default" : "false",
-      "AllowedValues" : [ "true", "false" ],
-      "ConstraintDescription" : "Enter either true of false" 
-    },
-
-    "AttachVpnGw" : {
-      "Type" : "String",
-      "Description" : "Attach IPSEC VPN Gateway to VPC?",
-      "Default" : "false",
-      "AllowedValues" : [ "true", "false" ],
-      "ConstraintDescription" : "Enter either true of false" 
-    },
-
     "VpcCidr" : {
       "Type" : "String",
       "Description" : "VPC CIDR block between /16 and /28",
@@ -91,144 +28,47 @@
       "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
     },
 
-    "DmzNetAz1" : {
+    "PubNetAz1" : {
       "Type" : "String",
-      "Description" : "CIDR block for DMZ subnet located in AZ1",
+      "Description" : "CIDR block for public subnet located in AZ1",
       "Default" : "10.0.0.0/26",
       "ConstraintDescription" : "CIDR block address must be in the form n.n.n.n/m",
       "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
     },
 
-    "DmzNetAz2" : {
+    "PubNetAz2" : {
       "Type" : "String",
-      "Description" : "CIDR block for DMZ subnet located in AZ2",
+      "Description" : "CIDR block for public subnet located in AZ2",
       "Default" : "10.0.0.64/26",
       "ConstraintDescription" : "CIDR block address must be in the form n.n.n.n/m",
       "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
     },
 
-    "WebNetAz1" : {
+    "PriNetAz1" : {
       "Type" : "String",
-      "Description" : "CIDR block for Web subnet located in AZ1",
+      "Description" : "CIDR block for private subnet located in AZ1",
       "Default" : "10.0.1.0/26",
       "ConstraintDescription" : "CIDR block address must be in the form n.n.n.n/m",
       "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
     },
 
-    "WebNetAz2" : {
+    "PriNetAz2" : {
       "Type" : "String",
-      "Description" : "CIDR block for Web subnet located in AZ2",
+      "Description" : "CIDR block for private subnet located in AZ2",
       "Default" : "10.0.1.64/26",
       "ConstraintDescription" : "CIDR block address must be in the form n.n.n.n/m",
       "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-    },
-
-    "AppNetAz1" : {
-      "Type" : "String",
-      "Description" : "CIDR block for App subnet located in AZ1",
-      "Default" : "10.0.2.0/26",
-      "ConstraintDescription" : "CIDR block address must be in the form n.n.n.n/m",
-      "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-    },
-
-    "AppNetAz2" : {
-      "Type" : "String",
-      "Description" : "CIDR block for App subnet located in AZ2",
-      "Default" : "10.0.2.64/26",
-      "ConstraintDescription" : "CIDR block address must be in the form n.n.n.n/m",
-      "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-    },
-
-    "StgNetAz1" : {
-      "Type" : "String",
-      "Description" : "CIDR block for Stg subnet located in AZ1",
-      "Default" : "10.0.3.0/26",
-      "ConstraintDescription" : "CIDR block address must be in the form n.n.n.n/m",
-      "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-    },
-
-    "StgNetAz2" : {
-      "Type" : "String",
-      "Description" : "CIDR block for Stg subnet located in AZ2",
-      "Default" : "10.0.3.64/26",
-      "ConstraintDescription" : "CIDR block address must be in the form n.n.n.n/m",
-      "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-    },
-	
-    "VpcDomainName" : {
-      "Type" : "String",
-      "Description" : "VPC DNS Domain Name - leave blank to use VPC default"
     }
 
   },
 
-  "Conditions" : {
-    "CreateVpnResources" : { "Fn::Equals" : [ { "Ref" : "CreateVpn" }, "true" ] },
-    "CreateNatResources" : { "Fn::Equals" : [ { "Ref" : "CreateNat" }, "true" ] },
-    "AttachIpsecGw" : { "Fn::Equals" : [ { "Ref" : "AttachVpnGw" }, "true" ] },
-    "CreateDhcpOptions" : { "Fn::Not" : [ { "Fn::Equals" : [ { "Ref" : "VpcDomainName" }, "" ] } ] }
-  },
-
-  "Resources" : {
-
-    "NatInstanceRole": {
-      "Type": "AWS::IAM::Role",
-      "Condition" : "CreateNatResources",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [ {
-              "Effect": "Allow",
-              "Principal": {
-                  "Service": [ "ec2.amazonaws.com" ]
-              },
-              "Action": [ "sts:AssumeRole" ]
-          } ]
-        },
-        "Path": "/"
-      }
-    },
-
-    "NatInstanceRolePolicy": {
-      "Type": "AWS::IAM::Policy",
-      "Condition" : "CreateNatResources",
-      "Properties": {
-        "PolicyName": "NatInstanceRolePolicy",
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [ "ec2:ModifyInstanceAttribute", "ec2:ReplaceRoute" ],
-              "Resource": "*"
-            }
-          ]
-        },
-        "Roles": [ { "Ref": "NatInstanceRole" } ]
-      }
-    },
-
-    "NatInstanceRoleProfile": {
-      "Type": "AWS::IAM::InstanceProfile",
-      "Condition" : "CreateNatResources",
-      "Properties": {
-          "Path": "/",
-          "Roles": [ { "Ref": "NatInstanceRole" } ]
-      }
-    },
-
-    "VpcDhcpOptions": {
-      "Condition" : "CreateDhcpOptions",
-      "Type" : "AWS::EC2::DHCPOptions",
-      "Properties" : {
-        "DomainName" : { "Ref" : "VpcDomainName" },
-        "DomainNameServers" : [ "AmazonProvidedDNS" ]
-      }
-    },     
+  "Resources" : {   
 	
     "Vpc" : {
       "Type" : "AWS::EC2::VPC",
       "Properties" : {
         "CidrBlock" : { "Ref" : "VpcCidr" },
-	"EnableDnsSupport" : "true",
+		"EnableDnsSupport" : "true",
         "EnableDnsHostnames" : "true",
         "Tags" : [
           { "Key" : "Name", "Value" : { "Fn::Join" : ["", [ { "Ref" : "AWS::Region" }, " AZCode VPC" ] ] } },
@@ -237,36 +77,27 @@
       }
     },
 	
-    "VpcDhcpOptionsAssociation" : { 
-      "Condition" : "CreateDhcpOptions",
-      "Type" : "AWS::EC2::VPCDHCPOptionsAssociation",
-      "Properties" : {
-        "DhcpOptionsId" :  { "Ref" : "VpcDhcpOptions" },
-        "VpcId" : { "Ref" : "Vpc" }
-      }
-    },    
-
-    "DmzSubnetAz1" : {
+    "PubSubnetAz1" : {
       "Type" : "AWS::EC2::Subnet",
       "Properties" : {
         "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "DmzNetAz1" },
-	"AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
+        "CidrBlock" : { "Ref" : "PubNetAz1" },
+		"AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
-          { "Key" : "Name", "Value" : "DMZ-AZ1" },
+          { "Key" : "Name", "Value" : "PUB-AZ1" },
           { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } }
         ]
       }
     },
 
-    "DmzSubnetAz2" : {
+    "PubSubnetAz2" : {
       "Type" : "AWS::EC2::Subnet",
       "Properties" : {
         "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "DmzNetAz2" },
+        "CidrBlock" : { "Ref" : "PubNetAz2" },
         "AvailabilityZone" : { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
-          { "Key" : "Name", "Value" : "DMZ-AZ2" },
+          { "Key" : "Name", "Value" : "PUB-AZ2" },
           { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } }
         ]
       }
@@ -290,27 +121,6 @@
       }
     },
 
-    "VpnGateway" : {
-      "Condition" : "AttachIpsecGw",
-      "Type" : "AWS::EC2::VPNGateway",
-      "Properties" : {
-        "Type" : "ipsec.1",
-        "Tags" : [ 
-          { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } },
-          { "Key" : "Name", "Value" : "Private VGW" }
-        ]
-      }
-    },
-
-    "AttachVgw" : {
-      "Condition" : "AttachIpsecGw",
-      "Type" : "AWS::EC2::VPCGatewayAttachment",
-      "Properties" : {
-        "VpcId" : { "Ref" : "Vpc" },
-        "VpnGatewayId" : { "Ref" : "VpnGateway" }
-      }
-    },     
-
     "RouteViaIgw" : {
       "Type" : "AWS::EC2::RouteTable",
       "Properties" : {
@@ -331,95 +141,43 @@
       }
     },
 
-    "DmzSubnetRouteTableAssociationAz1" : {
+    "PubSubnetRouteTableAssociationAz1" : {
       "Type" : "AWS::EC2::SubnetRouteTableAssociation",
       "Properties" : {
-        "SubnetId" : { "Ref" : "DmzSubnetAz1" },
+        "SubnetId" : { "Ref" : "PubSubnetAz1" },
         "RouteTableId" : { "Ref" : "RouteViaIgw" }
       }
     },
 
-    "DmzSubnetRouteTableAssociationAz2" : {
+    "PubSubnetRouteTableAssociationAz2" : {
       "Type" : "AWS::EC2::SubnetRouteTableAssociation",
       "Properties" : {
-        "SubnetId" : { "Ref" : "DmzSubnetAz2" },
+        "SubnetId" : { "Ref" : "PubSubnetAz2" },
         "RouteTableId" : { "Ref" : "RouteViaIgw" }
       }
     },
 
-    "WebSubnetAz1" : {
+    "PriSubnetAz1" : {
       "Type" : "AWS::EC2::Subnet",
       "Properties" : {
         "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "WebNetAz1" },
+        "CidrBlock" : { "Ref" : "PriNetAz1" },
         "AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
-          {"Key" : "Name", "Value" : "WebSubnet-AZ1" },
+          {"Key" : "Name", "Value" : "PRI-AZ1" },
           {"Key" : "Application", "Value" : { "Ref" : "AWS::StackName"} }
         ]
       }
     },
 
-    "WebSubnetAz2" : {
+    "PriSubnetAz2" : {
       "Type" : "AWS::EC2::Subnet",
       "Properties" : {
         "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "WebNetAz2" },
+        "CidrBlock" : { "Ref" : "PriNetAz2" },
         "AvailabilityZone" : { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
-          {"Key" : "Name", "Value" : "WebSubnet-AZ2" },
-          {"Key" : "Application", "Value" : { "Ref" : "AWS::StackName"} }
-        ]
-      }
-    },
-
-    "AppSubnetAz1" : {
-      "Type" : "AWS::EC2::Subnet",
-      "Properties" : {
-        "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "AppNetAz1" },
-        "AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
-        "Tags" : [
-          {"Key" : "Name", "Value" : "AppSubnet-AZ1" },
-          {"Key" : "Application", "Value" : { "Ref" : "AWS::StackName"} }
-        ]
-      }
-    },
-
-    "AppSubnetAz2" : {
-      "Type" : "AWS::EC2::Subnet",
-      "Properties" : {
-        "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "AppNetAz2" },
-        "AvailabilityZone" : { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
-        "Tags" : [
-          {"Key" : "Name", "Value" : "AppSubnet-AZ2" },
-          {"Key" : "Application", "Value" : { "Ref" : "AWS::StackName"} }
-        ]
-      }
-    },
-
-    "StgSubnetAz1" : {
-      "Type" : "AWS::EC2::Subnet",
-      "Properties" : {
-        "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "StgNetAz1" },
-        "AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
-        "Tags" : [
-          {"Key" : "Name", "Value" : "StgSubnet-AZ1" },
-          {"Key" : "Application", "Value" : { "Ref" : "AWS::StackName"} }
-        ]
-      }
-    },
-
-    "StgSubnetAz2" : {
-      "Type" : "AWS::EC2::Subnet",
-      "Properties" : {
-        "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "StgNetAz2" },
-        "AvailabilityZone" : { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
-        "Tags" : [
-          {"Key" : "Name", "Value" : "StgSubnet-AZ2" },
+          {"Key" : "Name", "Value" : "PRI-AZ2" },
           {"Key" : "Application", "Value" : { "Ref" : "AWS::StackName"} }
         ]
       }
@@ -439,7 +197,6 @@
 
     "NatRouteAz1" : {
       "Type" : "AWS::EC2::Route",
-      "Condition" : "CreateNatResources",
       "Properties" : {
         "RouteTableId" : { "Ref" : "RouteViaNatAz1" },
         "DestinationCidrBlock" : "0.0.0.0/0",
@@ -449,7 +206,6 @@
 
     "RouteViaNatAz2" : {
       "Type" : "AWS::EC2::RouteTable",
-      "Condition" : "CreateNatResources",
       "Properties" : {
         "VpcId" : {"Ref" : "Vpc"},
         "Tags" : [
@@ -461,7 +217,6 @@
 
     "NatRouteAz2" : {
       "Type" : "AWS::EC2::Route",
-      "Condition" : "CreateNatResources",
       "Properties" : {
         "RouteTableId" : { "Ref" : "RouteViaNatAz2" },
         "DestinationCidrBlock" : "0.0.0.0/0",
@@ -469,346 +224,51 @@
       }
     },
 
-    "WebSubnetRouteTableAssociationAz1" : {
+    "PriSubnetRouteTableAssociationAz1" : {
       "Type" : "AWS::EC2::SubnetRouteTableAssociation",
       "Condition" : "CreateNatResources",
       "Properties" : {
-        "SubnetId" : { "Ref" : "WebSubnetAz1" },
+        "SubnetId" : { "Ref" : "PriSubnetAz1" },
         "RouteTableId" : { "Ref" : "RouteViaNatAz1" }
       }
     },
 
-    "WebSubnetRouteTableAssociationAz2" : {
+    "PriSubnetRouteTableAssociationAz2" : {
       "Type" : "AWS::EC2::SubnetRouteTableAssociation",
       "Condition" : "CreateNatResources",
       "Properties" : {
-        "SubnetId" : { "Ref" : "WebSubnetAz2" },
+        "SubnetId" : { "Ref" : "PriSubnetAz2" },
         "RouteTableId" : { "Ref" : "RouteViaNatAz2" }
       }
     },
 
-    "AppSubnetRouteTableAssociationAz1" : {
-      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
-      "Condition" : "CreateNatResources",
-      "Properties" : {
-        "SubnetId" : { "Ref" : "AppSubnetAz1" },
-        "RouteTableId" : { "Ref" : "RouteViaNatAz1" }
-      }
-    },
-
-    "AppSubnetRouteTableAssociationAz2" : {
-      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
-      "Condition" : "CreateNatResources",
-      "Properties" : {
-        "SubnetId" : { "Ref" : "AppSubnetAz2" },
-        "RouteTableId" : { "Ref" : "RouteViaNatAz2" }
-      }
-    },
-
-    "StgSubnetRouteTableAssociationAz1" : {
-      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
-      "Condition" : "CreateNatResources",
-      "Properties" : {
-        "SubnetId" : { "Ref" : "StgSubnetAz1" },
-        "RouteTableId" : { "Ref" : "RouteViaNatAz1" }
-      }
-    },
-
-    "StgSubnetRouteTableAssociationAz2" : {
-      "Type" : "AWS::EC2::SubnetRouteTableAssociation",
-      "Condition" : "CreateNatResources",
-      "Properties" : {
-        "SubnetId" : { "Ref" : "StgSubnetAz2" },
-        "RouteTableId" : { "Ref" : "RouteViaNatAz2" }
-      }
-    },
-
-    "RemoteAdminSecurityGroup" : {
-      "Type" : "AWS::EC2::SecurityGroup",
-      "Properties" : {
-        "GroupDescription" : "Remote Admin Access",
-        "VpcId" : { "Ref" : "Vpc" },
-        "SecurityGroupIngress" : [ { "IpProtocol" : "tcp", "FromPort" : "22", "ToPort" : "22", "CidrIp" : "0.0.0.0/0" } ]
-      }
-    },
-
-    "NatSecurityGroup" : {
-      "Type" : "AWS::EC2::SecurityGroup",
-      "Condition" : "CreateNatResources",
-      "Properties" : {
-        "GroupDescription" : "Private instances access via NAT",
-        "VpcId" : { "Ref" : "Vpc" },
-        "SecurityGroupIngress" : [ 
-                { "IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : { "Ref" : "VpcCidr" } },
-                { "IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "CidrIp" : { "Ref" : "VpcCidr" } }
-        ],
-        "SecurityGroupEgress" : [ 
-                { "IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0" },
-                { "IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "CidrIp" : "0.0.0.0/0" }
-        ]
-      }
-    },
-
-    "VpnSecurityGroup" : {
-      "Type" : "AWS::EC2::SecurityGroup",
-      "Condition" : "CreateVpnResources",
-      "Properties" : {
-        "GroupDescription" : "SSL VPN Port Access",
-        "VpcId" : { "Ref" : "Vpc" },
-        "SecurityGroupIngress" : [
-              { "IpProtocol" : "udp", "FromPort" : "1194", "ToPort" : "1194", "CidrIp" : "0.0.0.0/0" },
-              { "IpProtocol" : "tcp", "FromPort" : "943", "ToPort" : "943", "CidrIp" : "0.0.0.0/0" },
-              { "IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "CidrIp" : "0.0.0.0/0" }
-         ]
-      }
-    },
-
-    "NatInstance1" : {
-      "Type" : "AWS::AutoScaling::LaunchConfiguration",
-      "Condition" : "CreateNatResources",
-      "Metadata" : {
-        "AWS::CloudFormation::Init" : {
-          "config" : {
-            "files" : {
-              "/etc/sysctl.d/nat.conf" : {
-                "content" : { "Fn::Join" : [ "", [
-                  "net.ipv4.ip_forward = 1\n",
-                  "net.ipv4.conf.eth0.send_redirects = 0\n"
-                  ] ]
-                },
-                "mode" : "000644",
-                "owner" : "root",
-                "group" : "root"
-              }
-            },
-            "commands" : {
-              "1-config-forwarding" : {
-                "command" : { "Fn::Join" : [ "", [
-                  "yum -y update aws*\n",
-                  "sysctl -e -p /etc/sysctl.d/nat.conf\n",
-                  "/sbin/iptables -t nat -A POSTROUTING -o eth0 -s ", { "Ref" : "VpcCidr" },  " -j MASQUERADE\n",
-                  "/sbin/iptables-save > /etc/sysconfig/iptables\n",
-                  "INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)\n",
-                  "aws ec2 modify-instance-attribute --instance-id $INSTANCEID --source-dest-check '{\"Value\": false}' --region ", { "Ref" : "AWS::Region" }, "\n"
-                  ] ]
-                }
-              },
-              "2-config-routing" : {
-                "command" : { "Fn::Join" : [ "", [
-                  "yum -y update aws-cli*\n",
-                  "INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)\n",
-                  "aws ec2 replace-route --route-table-id ", { "Ref" : "RouteViaNatAz1" }, " --destination-cidr-block 0.0.0.0/0 --instance-id $INSTANCEID --region ", { "Ref" : "AWS::Region" }, "\n"
-                  ] ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "Properties" : {
-        "ImageId" : { "Fn::FindInMap" : [ "RegionAmis", { "Ref" : "AWS::Region" }, "nat" ] },
-        "InstanceType" : { "Ref" : "NatInstanceType" },
-        "AssociatePublicIpAddress" : true,
-        "IamInstanceProfile": { "Ref": "NatInstanceRoleProfile" },
-        "KeyName" : { "Ref" : "KeyName" },
-        "SecurityGroups" : [ { "Ref" : "RemoteAdminSecurityGroup" }, { "Ref" : "NatSecurityGroup" } ],
-        "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
-          "#!/bin/bash\n",
-          "yum update -y aws-cfn-bootstrap\n",
-          "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackId" }, " -r NatInstance1 --region ", { "Ref" : "AWS::Region" }, "\n"
-          ] ] 
-        } }
-      }
-    },
-
-    "NatInstance2" : {
-      "Type" : "AWS::AutoScaling::LaunchConfiguration",
-      "Condition" : "CreateNatResources",
-      "Metadata" : {
-        "AWS::CloudFormation::Init" : {
-          "config" : {
-            "files" : {
-              "/etc/sysctl.d/nat.conf" : {
-                "content" : { "Fn::Join" : [ "", [
-                  "net.ipv4.ip_forward = 1\n",
-                  "net.ipv4.conf.eth0.send_redirects = 0\n"
-                  ] ]
-                },
-                "mode" : "000644",
-                "owner" : "root",
-                "group" : "root"
-              }
-            },
-            "commands" : {
-              "1-config-forwarding" : {
-                "command" : { "Fn::Join" : [ "", [
-                  "yum -y update aws*\n",
-                  "sysctl -e -p /etc/sysctl.d/nat.conf\n",
-                  "/sbin/iptables -t nat -A POSTROUTING -o eth0 -s ", { "Ref" : "VpcCidr" },  " -j MASQUERADE\n",
-                  "/sbin/iptables-save > /etc/sysconfig/iptables\n",
-                  "INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)\n",
-                  "aws ec2 modify-instance-attribute --instance-id $INSTANCEID --source-dest-check '{ \"Value\" : false}' --region ", { "Ref" : "AWS::Region" }, "\n"
-                  ] ]
-                }
-              },
-              "2-config-routing" : {
-                "command" : { "Fn::Join" : [ "", [
-                  "yum -y update aws-cli*\n",
-                  "INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)\n",
-                  "aws ec2 replace-route --route-table-id ", { "Ref" : "RouteViaNatAz2" }, " --destination-cidr-block 0.0.0.0/0 --instance-id $INSTANCEID --region ", { "Ref" : "AWS::Region" }, "\n"
-                  ] ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "Properties" : {
-        "ImageId" : { "Fn::FindInMap" : [ "RegionAmis", { "Ref" : "AWS::Region" }, "nat" ] },
-        "InstanceType" : { "Ref" : "NatInstanceType" },
-        "AssociatePublicIpAddress" : true,
-        "IamInstanceProfile": { "Ref": "NatInstanceRoleProfile" },
-        "KeyName" : { "Ref" : "KeyName" },
-        "SecurityGroups" : [ { "Ref" : "RemoteAdminSecurityGroup" }, { "Ref" : "NatSecurityGroup" } ],
-        "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
-          "#!/bin/bash\n",
-          "yum update -y aws-cfn-bootstrap\n",
-          "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackId" }, " -r NatInstance2 --region ", { "Ref" : "AWS::Region" }, "\n"
-          ] ] 
-        } }
-      }
-    },
-
-    "NatInstance1Asg" : {
-      "Type" : "AWS::AutoScaling::AutoScalingGroup",
-      "Condition" : "CreateNatResources",
-      "Properties" : {
-        "AvailabilityZones" : [ { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] }, { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] } ],
-        "VPCZoneIdentifier" : [ { "Ref" : "DmzSubnetAz1" },  { "Ref" : "DmzSubnetAz2" } ],
-        "LaunchConfigurationName" : { "Ref" : "NatInstance1" },
-        "MinSize" : "1",
-        "MaxSize" : "1",
-        "Tags" : [ { "Key" : "Name", "Value" : "NAT Instance 1", "PropagateAtLaunch" : "true" } ]
-      }
-    },
-
-    "NatInstance2Asg" : {
-      "Type" : "AWS::AutoScaling::AutoScalingGroup",
-      "Condition" : "CreateNatResources",
-      "Properties" : {
-        "AvailabilityZones" : [ { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] }, { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] } ],
-        "VPCZoneIdentifier" : [ { "Ref" : "DmzSubnetAz1" },  { "Ref" : "DmzSubnetAz2" } ],
-        "LaunchConfigurationName" : { "Ref" : "NatInstance2" },
-        "MinSize" : "1",
-        "MaxSize" : "1",
-        "Tags" : [ { "Key" : "Name", "Value" : "NAT Instance 2", "PropagateAtLaunch" : "true" } ]
-      }
-    },
-
-    "VpnServerInstance" : {
-      "Type" : "AWS::EC2::Instance",
-      "Condition" : "CreateVpnResources",
-      "Properties" : {
-        "ImageId" : { "Fn::FindInMap" : [ "RegionAmis", { "Ref" : "AWS::Region" }, "vpn" ] },
-        "InstanceType" : { "Ref" : "VpnInstanceType" },
-        "DisableApiTermination" : "false",
-	"SourceDestCheck" : "false",
-        "KeyName" : { "Ref" : "KeyName" },
-        "SecurityGroupIds" : [ { "Ref" : "RemoteAdminSecurityGroup" }, { "Ref" : "VpnSecurityGroup" } ],
-        "SubnetId" : { "Ref" : "DmzSubnetAz2" },
-        "Tags" : [
-          { "Key" : "Name", "Value" : { "Fn::Join" : ["", [ { "Ref" : "AWS::Region" }, " SSL VPN GWY" ] ] } },
-          { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } }
-        ],
-        "UserData" : { "Fn::Base64" : { "Fn::Join" : [ "",
-				[
-					"public_hostname=",{ "Fn::Join" : ["", [ { "Ref" : "VpnShortHostname" }, ".", { "Ref" : "HostedZone" } ] ] },
-					"\n",
-					"admin_pw=",{ "Ref" : "VpnUserPassword" },
-					"\n",
-					"reroute_gw=1",
-					"\n",
-					"reroute_dns=1",
-					"\n"
-				] ]
-			} }
-      }
-    },
-
-    "VpnIpAddress" : {
-      "Type" : "AWS::EC2::EIP",
-      "Condition" : "CreateVpnResources",
-      "Properties" : {
-        "Domain" : "vpc",
-	"InstanceId" : { "Ref" : "VpnServerInstance" }
-      }
-    },
-
-    "DnsRecord" : {
-      "Type" : "AWS::Route53::RecordSet",
-      "Condition" : "CreateVpnResources",
-      "Properties" : {
-        "HostedZoneName" : { "Fn::Join" : ["", [{ "Ref" : "HostedZone" }, "."]] },
-        "Name" : { "Fn::Join" : ["", [ { "Ref" : "VpnShortHostname" }, ".", { "Ref" : "HostedZone" } ] ] },
-        "Type" : "A",
-        "TTL" : "60",
-        "ResourceRecords" : [ { "Fn::GetAtt" : [ "VpnServerInstance", "PublicIp" ] } ]
-      },
-      "DependsOn" : "VpnIpAddress"
-    }
   },
 
   "Outputs" : {
-
-    "VpnInstance" : {
-      "Condition" : "CreateVpnResources",
-      "Description" : "VPN instance URL",
-      "Value" : { "Fn::Join" : [ "", [ "https://", { "Ref" : "VpnShortHostname"}, ".", { "Ref" : "HostedZone" }, "/" ] ] }
-    },
 
     "VpcId" : {
       "Description" : "VPC Id",
       "Value" : { "Ref" : "Vpc" }
     },
 
-    "DmzSubnetIdAz1" : {
-      "Description" : "Subnet ID for DMZ Subnet AZ1",
-      "Value" : { "Ref" : "DmzSubnetAz1" }
+    "PubSubnetIdAz1" : {
+      "Description" : "Subnet ID for Public Subnet AZ1",
+      "Value" : { "Ref" : "PubSubnetAz1" }
     },
 
-    "DmzSubnetIdAz2" : {
-      "Description" : "Subnet ID for DMZ Subnet AZ2",
-      "Value" : { "Ref" : "DmzSubnetAz2" }
+    "PubSubnetIdAz2" : {
+      "Description" : "Subnet ID for Public Subnet AZ2",
+      "Value" : { "Ref" : "PubSubnetAz2" }
     },
 
-    "WebSubnetIdAz1" : {
-      "Description" : "Subnet ID for Web Subnet AZ1",
-      "Value" : { "Ref" : "WebSubnetAz1" }
+    "PriSubnetIdAz1" : {
+      "Description" : "Subnet ID for Private Subnet AZ1",
+      "Value" : { "Ref" : "PriSubnetAz1" }
     },
 
-    "WebSubnetIdAz2" : {
-      "Description" : "Subnet ID for Web Subnet AZ2",
-      "Value" : { "Ref" : "WebSubnetAz2" }
-    },
-
-    "AppSubnetIdAz1" : {
-      "Description" : "Subnet ID for App Subnet AZ1",
-      "Value" : { "Ref" : "AppSubnetAz1" }
-    },
-
-    "AppSubnetIdAz2" : {
-      "Description" : "Subnet ID for App Subnet AZ2",
-      "Value" : { "Ref" : "AppSubnetAz2" }
-    },
-
-    "StgSubnetIdAz1" : {
-      "Description" : "Subnet ID for Stg Subnet AZ1",
-      "Value" : { "Ref" : "StgSubnetAz1" }
-    },
-
-    "StgSubnetIdAz2" : {
-      "Description" : "Subnet ID for Stg Subnet AZ2",
-      "Value" : { "Ref" : "StgSubnetAz2" }
+    "PriSubnetIdAz2" : {
+      "Description" : "Subnet ID for Private Subnet AZ2",
+      "Value" : { "Ref" : "PriSubnetAz2" }
     }
 
   } 
