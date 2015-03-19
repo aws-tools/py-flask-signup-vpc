@@ -48,14 +48,6 @@
 
   "Resources" : {   
   
-      "AdminSecurityGroup": {
-      "Type": "AWS::EC2::SecurityGroup",
-      "Properties": {
-        "GroupDescription": "SSH access on port 22",
-        "SecurityGroupIngress": [ { "CidrIp": "0.0.0.0/0", "FromPort": "22", "IpProtocol": "tcp", "ToPort": "22" } ]
-      }
-    },
-    
     "Vpc" : {
       "Type" : "AWS::EC2::VPC",
       "Properties" : {
