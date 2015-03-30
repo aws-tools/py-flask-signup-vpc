@@ -79,8 +79,7 @@
 		"EnableDnsSupport" : "true",
         "EnableDnsHostnames" : "true",
         "Tags" : [
-          { "Key" : "Name", "Value" : { "Fn::Join" : ["", [ { "Ref" : "AWS::Region" }, " AZCode VPC" ] ] } },
-          { "Key" : "Application", "Value" : { "Ref" : "AWS::StackName" } }
+          { "Key" : "Name", "Value" : { "Fn::Join" : ["", [ { "Ref" : "AWS::Region" }, " Flask SignUp App VPC" ] ] } }
         ]
       }
     },
@@ -92,7 +91,7 @@
         "CidrBlock" : { "Ref" : "PubNetAz1" },
 		"AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
-          { "Key" : "Name", "Value" : "PUB-AZ1" }
+          { "Key" : "Name", "Value" : "Flask SignUp App Public Subnet Az1" }
         ]
       }
     },
@@ -104,7 +103,7 @@
         "CidrBlock" : { "Ref" : "PubNetAz2" },
         "AvailabilityZone" : { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
-          { "Key" : "Name", "Value" : "PUB-AZ2" }
+          { "Key" : "Name", "Value" : "Flask SignUp App Public Subnet Az2" }
         ]
       }
     },
@@ -113,7 +112,7 @@
       "Type" : "AWS::EC2::InternetGateway",
       "Properties" : {
         "Tags" : [
-          { "Key" : "Name", "Value" : "Public IGW" }
+          { "Key" : "Name", "Value" : "Flask SignUp App IGW" }
         ]
       }
     },
@@ -131,7 +130,7 @@
       "Properties" : {
         "VpcId" : {"Ref" : "Vpc"},
         "Tags" : [
-          { "Key" : "Name", "Value" : "Public Route Table" }
+          { "Key" : "Name", "Value" : "Flask SignUp App Public Route Table" }
         ]
       }
     },
@@ -293,7 +292,7 @@
         "CidrBlock" : { "Ref" : "PriNetAz1" },
         "AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
-          {"Key" : "Name", "Value" : "PRI-AZ1" }
+          {"Key" : "Name", "Value" : "Flask SignUp App Private Subnet Az1" }
         ]
       }
     },
@@ -305,7 +304,7 @@
         "CidrBlock" : { "Ref" : "PriNetAz2" },
         "AvailabilityZone" : { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
-          {"Key" : "Name", "Value" : "PRI-AZ2" }
+          {"Key" : "Name", "Value" : "Flask SignUp App Private Subnet Az2" }
         ]
       }
     },
@@ -315,7 +314,7 @@
       "Properties" : {
         "VpcId" : {"Ref" : "Vpc"},
         "Tags" : [
-          {"Key" : "Name", "Value" : "Private Route Table" }
+          {"Key" : "Name", "Value" : "Flask SignUp App Private Route Table" }
         ]
       }
     },
