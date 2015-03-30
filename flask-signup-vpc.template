@@ -278,7 +278,7 @@
       "Type" : "AWS::AutoScaling::AutoScalingGroup",
       "Properties" : {
         "AvailabilityZones" : [ { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] }, { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] } ],
-        "VPCZoneIdentifier" : [ { "Ref" : "PubNetAz1" }, { "Ref" : "PubNetAz2" } ],
+        "VPCZoneIdentifier" : [ { "Ref" : "PubSubnetAz1" }, { "Ref" : "PubSubnetAz2" } ],
         "LaunchConfigurationName" : { "Ref" : "NatInstance" },
         "MinSize" : "1",
         "MaxSize" : "1",
