@@ -198,7 +198,7 @@
     "VpnGwy" : {
 	"Type" : "AWS::EC2::VPNGateway",
 	"Properties" : {
-		"Type" : ipsec.1
+		"Type" : "ipsec.1"
 	}
 },
 
