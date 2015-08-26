@@ -1,22 +1,6 @@
 { "AWSTemplateFormatVersion" : "2010-09-09",
 
   "Description" : "AWS CloudFormation template to setup VPC with 2 subnets, public and private, per AZ VPC.",
-
-  "Mappings" : {
-
-        "RegionAmis"   : {
-            "eu-west-1"       : { "nat" : "ami-892fe1fe" },
-            "eu-central-1"    : { "nat" : "ami-204c7a3d" },
-            "sa-east-1"       : { "nat" : "ami-204c7a3d" },
-            "us-east-1"       : { "nat" : "ami-76817c1e" },
-            "ap-northeast-1"  : { "nat" : "ami-29dc9228" },
-            "us-west-2"       : { "nat" : "ami-d13845e1" },
-            "us-west-1"       : { "nat" : "ami-f0d3d4b5" },
-            "ap-southeast-1"  : { "nat" : "ami-a6b6eaf4" },
-            "ap-southeast-2"  : { "nat" : "ami-d9fe9be3" }
-        }
-
-  }, 
   
   "Parameters" : {
 
@@ -28,7 +12,7 @@
       "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
     },
 
-    "PubNetAz1" : {
+    "PubNetCidrAz1" : {
       "Type" : "String",
       "Description" : "CIDR block for public subnet located in AZ1",
       "Default" : "10.100.0.0/25",
@@ -36,7 +20,7 @@
       "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
     },
 
-    "PubNetAz2" : {
+    "PubNetCidrAz2" : {
       "Type" : "String",
       "Description" : "CIDR block for public subnet located in AZ2",
       "Default" : "10.100.0.128/25",
@@ -44,7 +28,7 @@
       "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
     },
 
-    "PriNetAz1" : {
+    "PriNetCidrAz1" : {
       "Type" : "String",
       "Description" : "CIDR block for private subnet located in AZ1",
       "Default" : "10.100.1.0/25",
@@ -52,20 +36,12 @@
       "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
     },
 
-    "PriNetAz2" : {
+    "PriNetCidrAz2" : {
       "Type" : "String",
       "Description" : "CIDR block for private subnet located in AZ2",
       "Default" : "10.100.1.128/25",
       "ConstraintDescription" : "CIDR block address must be in the form n.n.n.n/m",
       "AllowedPattern" : "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})"
-    },
-    
-    "NatInstanceType" : {
-      "Description" : "NAT EC2 instance type",
-      "Type" : "String",
-      "Default" : "t2.micro",
-      "AllowedValues" : [ "t2.micro","t2.small","t2.medium","m3.medium","m3.large","m3.xlarge","m3.2xlarge","c4.large","c4.xlarge","c4.2xlarge","c4.4xlarge","c4.8xlarge","c3.large","c3.xlarge","c3.2xlarge","c3.4xlarge","c3.8xlarge","r3.large","r3.xlarge","r3.2xlarge","r3.4xlarge","r3.8xlarge","i2.xlarge","i2.2xlarge","i2.4xlarge","i2.8xlarge" ],
-      "ConstraintDescription" : "must be a valid EC2 instance type."
     }
 
   },
@@ -88,7 +64,7 @@
       "Type" : "AWS::EC2::Subnet",
       "Properties" : {
         "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "PubNetAz1" },
+        "CidrBlock" : { "Ref" : "PubNetCidrAz1" },
 		"AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
           { "Key" : "Name", "Value" : "Flask SignUp App Public Subnet Az1" }
@@ -100,7 +76,7 @@
       "Type" : "AWS::EC2::Subnet",
       "Properties" : {
         "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "PubNetAz2" },
+        "CidrBlock" : { "Ref" : "PubNetCidrAz2" },
         "AvailabilityZone" : { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
           { "Key" : "Name", "Value" : "Flask SignUp App Public Subnet Az2" }
@@ -159,137 +135,12 @@
         "RouteTableId" : { "Ref" : "RouteViaIgw" }
       }
     },
-
-    "NatInstanceRole": {
-      "Type": "AWS::IAM::Role",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [ {
-              "Effect": "Allow",
-              "Principal": {
-                  "Service": [ "ec2.amazonaws.com" ]
-              },
-              "Action": [ "sts:AssumeRole" ]
-          } ]
-        },
-        "Path": "/"
-      }
-    },
-
-    "NatInstanceRolePolicy": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyName": "NatInstanceRolePolicy",
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Effect": "Allow",
-              "Action": [ "ec2:ModifyInstanceAttribute", "ec2:ReplaceRoute" ],
-              "Resource": "*"
-            }
-          ]
-        },
-        "Roles": [ { "Ref": "NatInstanceRole" } ]
-      }
-    },
-
-    "NatInstanceRoleProfile": {
-      "Type": "AWS::IAM::InstanceProfile",
-      "Properties": {
-          "Path": "/",
-          "Roles": [ { "Ref": "NatInstanceRole" } ]
-      }
-    },
-
-    "NatSecurityGroup" : {
-      "Type" : "AWS::EC2::SecurityGroup",
-      "Properties" : {
-        "GroupDescription" : "Private instances access via NAT",
-        "VpcId" : { "Ref" : "Vpc" },
-        "SecurityGroupIngress" : [ 
-                { "IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : { "Ref" : "VpcCidr" } },
-                { "IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "CidrIp" : { "Ref" : "VpcCidr" } }
-        ],
-        "SecurityGroupEgress" : [ 
-                { "IpProtocol" : "tcp", "FromPort" : "80", "ToPort" : "80", "CidrIp" : "0.0.0.0/0" },
-                { "IpProtocol" : "tcp", "FromPort" : "443", "ToPort" : "443", "CidrIp" : "0.0.0.0/0" }
-        ]
-      }
-    },
-    
-    "NatInstance" : {
-      "Type" : "AWS::AutoScaling::LaunchConfiguration",
-      "Metadata" : {
-        "AWS::CloudFormation::Init" : {
-          "config" : {
-            "files" : {
-              "/etc/sysctl.d/nat.conf" : {
-                "content" : { "Fn::Join" : [ "", [
-                  "net.ipv4.ip_forward = 1\n",
-                  "net.ipv4.conf.eth0.send_redirects = 0\n"
-                  ] ]
-                },
-                "mode" : "000644",
-                "owner" : "root",
-                "group" : "root"
-              }
-            },
-            "commands" : {
-              "1-config-forwarding" : {
-                "command" : { "Fn::Join" : [ "", [
-                  "yum -y update aws*\n",
-                  "sysctl -e -p /etc/sysctl.d/nat.conf\n",
-                  "/sbin/iptables -t nat -A POSTROUTING -o eth0 -s ", { "Ref" : "VpcCidr" },  " -j MASQUERADE\n",
-                  "/sbin/iptables-save > /etc/sysconfig/iptables\n",
-                  "INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)\n",
-                  "aws ec2 modify-instance-attribute --instance-id $INSTANCEID --source-dest-check '{ \"Value\" : false}' --region ", { "Ref" : "AWS::Region" }, "\n"
-                  ] ]
-                }
-              },
-              "2-config-routing" : {
-                "command" : { "Fn::Join" : [ "", [
-                  "yum -y update aws-cli*\n",
-                  "INSTANCEID=$(curl -s http://169.254.169.254/latest/meta-data/instance-id)\n",
-                  "aws ec2 replace-route --route-table-id ", { "Ref" : "RouteViaNat" }, " --destination-cidr-block 0.0.0.0/0 --instance-id $INSTANCEID --region ", { "Ref" : "AWS::Region" }, "\n"
-                  ] ]
-                }
-              }
-            }
-          }
-        }
-      },
-      "Properties" : {
-        "ImageId" : { "Fn::FindInMap" : [ "RegionAmis", { "Ref" : "AWS::Region" }, "nat" ] },
-        "InstanceType" : { "Ref" : "NatInstanceType" },
-        "AssociatePublicIpAddress" : true,
-        "IamInstanceProfile": { "Ref": "NatInstanceRoleProfile" },
-        "SecurityGroups" : [ { "Ref" : "NatSecurityGroup" } ],
-        "UserData" : { "Fn::Base64" : { "Fn::Join" : ["", [
-          "#!/bin/bash\n",
-          "yum update -y aws-cfn-bootstrap\n",
-          "/opt/aws/bin/cfn-init -s ", { "Ref" : "AWS::StackId" }, " -r NatInstance --region ", { "Ref" : "AWS::Region" }, "\n"
-          ] ] 
-        } }
-      }
-    },
-    
-    "NatInstanceAsg" : {
-      "Type" : "AWS::AutoScaling::AutoScalingGroup",
-      "Properties" : {
-        "AvailabilityZones" : [ { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] }, { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] } ],
-        "VPCZoneIdentifier" : [ { "Ref" : "PubSubnetAz1" }, { "Ref" : "PubSubnetAz2" } ],
-        "LaunchConfigurationName" : { "Ref" : "NatInstance" },
-        "MinSize" : "1",
-        "MaxSize" : "1",
-        "Tags" : [ { "Key" : "Name", "Value" : "NAT Instance", "PropagateAtLaunch" : "true" } ]
-      }
-    },
     
     "PriSubnetAz1" : {
       "Type" : "AWS::EC2::Subnet",
       "Properties" : {
         "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "PriNetAz1" },
+        "CidrBlock" : { "Ref" : "PriNetCidrAz1" },
         "AvailabilityZone" : { "Fn::Select" : [ "0", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
           {"Key" : "Name", "Value" : "Flask SignUp App Private Subnet Az1" }
@@ -301,7 +152,7 @@
       "Type" : "AWS::EC2::Subnet",
       "Properties" : {
         "VpcId" : { "Ref" : "Vpc" },
-        "CidrBlock" : { "Ref" : "PriNetAz2" },
+        "CidrBlock" : { "Ref" : "PriNetCidrAz2" },
         "AvailabilityZone" : { "Fn::Select" : [ "1", { "Fn::GetAZs" : { "Ref" : "AWS::Region" } } ] },
         "Tags" : [
           {"Key" : "Name", "Value" : "Flask SignUp App Private Subnet Az2" }
@@ -318,7 +169,7 @@
         ]
       }
     },
-
+	
     "NatRoute" : {
       "Type" : "AWS::EC2::Route",
       "Properties" : {
@@ -363,6 +214,11 @@
       "Value" : { "Ref" : "PubSubnetAz2" }
     },
 
+	"PubSubnetRouteTable" : {
+      "Description" : "Route table id for public subnets",
+	  "Value" : { "Ref" : "RouteViaIgw" }
+	},
+
     "PriSubnetIdAz1" : {
       "Description" : "Subnet ID for Private Subnet AZ1",
       "Value" : { "Ref" : "PriSubnetAz1" }
@@ -371,7 +227,12 @@
     "PriSubnetIdAz2" : {
       "Description" : "Subnet ID for Private Subnet AZ2",
       "Value" : { "Ref" : "PriSubnetAz2" }
-    }
+    },
+	
+	"PriSubnetRouteTable" : {
+      "Description" : "Route table id for private subnets",
+	  "Value" : { "Ref" : "RouteViaNat" }
+	}
 
   } 
 
