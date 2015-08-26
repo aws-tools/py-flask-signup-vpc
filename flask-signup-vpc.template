@@ -207,15 +207,16 @@
 	"Properties" : {
 	  "VpcId" : { "Ref" : "Vpc" },
 	  "VpnGatewayId" : { "Ref" : "VpnGwy" }
+	}
 },
-
 
 "SmtpAccessSg": {
 	"Type": "AWS::EC2::SecurityGroup",
 	"Properties": {
-	"VpcId" : { "Ref" : "Vpc" },
-	"GroupDescription": "Mail access on port 25", 
-	"SecurityGroupIngress": [ { "CidrIp": "0.0.0.0/0", "FromPort": "25", "IpProtocol": "tcp", "ToPort": "25" } ] }
+	  "VpcId" : { "Ref" : "Vpc" },
+	  "GroupDescription": "Mail access on port 25", 
+	  "SecurityGroupIngress": [ { "CidrIp": "0.0.0.0/0", "FromPort": "25", "IpProtocol": "tcp", "ToPort": "25" } ] 
+	}
 }
 
   },
